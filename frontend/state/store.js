@@ -17,6 +17,7 @@ const initialState = {
     '5': false,
   },
   filter: 'All',
+  orderInProgress: false,
 };
 
 const ordersSlice = createSlice({
@@ -37,15 +38,18 @@ const ordersSlice = createSlice({
     },
     addOrderStart(state) {
       state.loading = true;
+      state.orderInProgress = true;
     },
     addOrderSuccess(state, action) {
       state.loading = false;
       state.orders.push(action.payload);
       state.filteredOrders.push(action.payload);
+      state.orderInProgress = false;
     },
     addOrderFailure(state, action) {
       state.loading = false;
       state.error = action.payload;
+      state.orderInProgress = false;
     },
     filterOrders(state, action) {
       state.filter = action.payload;
@@ -101,9 +105,13 @@ export const postOrder = (order) => async dispatch => {
   }
 };
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     orders: ordersSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });
+
+export default store;
+
+export const resetStore = () => store;

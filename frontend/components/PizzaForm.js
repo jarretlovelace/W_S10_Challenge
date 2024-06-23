@@ -4,7 +4,7 @@ import { postOrder, clearError, updateFormState } from '../state/store';
 
 export default function PizzaForm() {
   const dispatch = useDispatch();
-  const { formState, loading, error } = useSelector(state => state.orders);
+  const { formState, loading, error, orderInProgress } = useSelector(state => state.orders);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -27,8 +27,8 @@ export default function PizzaForm() {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Pizza Form</h2>
-      {loading && <div className='pending'>Order in progress...</div>}
-      {error && <div className='failure'>Order failed: {error}</div>}
+      {orderInProgress && <div className='pending'>Order in progress...</div>}
+      {error && <div className='failure'>{error}</div>}
 
       <div className="input-group">
         <div>
